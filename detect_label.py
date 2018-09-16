@@ -5,21 +5,15 @@ import boto3
 import cv2
 
 client = boto3.client('rekognition')
+scale_factor = .15
 
 if __name__ == "__main__":
 
     # 内蔵カメラを起動
     cap = cv2.VideoCapture(0)
 
-    cascade_path = "./model/haarcascade_frontalface_alt.xml"
-    # カスケード分類器の特徴量を取得する
-    cascade = cv2.CascadeClassifier(cascade_path)
-
-    # 顔に表示される枠の色を指定（白色）
-    color = (255, 255, 255)
-
     # フォントの大きさ
-    fontscale = 0.5
+    fontscale = 1.0
     # フォントカラー(B, G, R)
     color = (0, 120, 238)
     # フォント
@@ -41,9 +35,10 @@ if __name__ == "__main__":
 
         # 内蔵カメラから読み込んだキャプチャデータを取得
         ret, frame = cap.read()
+        height, width, channels = frame.shape
+        small = cv2.resize(frame, (int(width * scale_factor), int(height * scale_factor)))
 
-        print("send frame data to aws rekognition...")
-        ret, fileImg = cv2.imencode('.png', frame)
+        ret, fileImg = cv2.imencode('.png', small)
         response = client.detect_labels(Image={'Bytes': fileImg.tobytes()})
 
         # print('Detected labels for Camera Capture.\n')
@@ -51,7 +46,7 @@ if __name__ == "__main__":
         for label in response['Labels']:
             print(label['Name'] + ' : ' + str(label['Confidence']))
             # cv2.putText(描画先, 描画文字列, 描画座標[左下が基準], フォント, フォントカラー)
-            cv2.putText(frame, label['Name'] + ' : ' + str(label['Confidence']), (25, 40 + (i * 15)), fontface,
+            cv2.putText(frame, label['Name'] + ' : ' + str(label['Confidence']), (25, 40 + (i * 25)), fontface,
                         fontscale, color)
             i += 1
 

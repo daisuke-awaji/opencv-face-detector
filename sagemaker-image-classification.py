@@ -4,45 +4,28 @@ import cv2
 
 import boto3
 runtime = boto3.Session().client(service_name='runtime.sagemaker')
+scale_factor = .15
 
 if __name__ == "__main__":
 
     # 内蔵カメラを起動
     cap = cv2.VideoCapture(0)
 
-    cascade_path = "./model/haarcascade_frontalface_alt.xml"
-    # カスケード分類器の特徴量を取得する
-    cascade = cv2.CascadeClassifier(cascade_path)
-
-    # 顔に表示される枠の色を指定（白色）
-    color = (255, 255, 255)
-
     # フォントの大きさ
-    fontscale = 0.5
+    fontscale = 1.0
     # フォントカラー(B, G, R)
     color = (0, 120, 238)
     # フォント
-    """
-    使用可能なフォント一覧
-    FONT_HERSHEY_COMPLEX
-    FONT_HERSHEY_COMPLEX_SMALL
-    FONT_HERSHEY_DUPLEX
-    FONT_HERSHEY_PLAIN
-    FONT_HERSHEY_SCRIPT_COMPLEX
-    FONT_HERSHEY_SCRIPT_SIMPLEX
-    FONT_HERSHEY_SIMPLEX
-    FONT_HERSHEY_TRIPLEX
-    FONT_ITALIC
-    """
     fontface = cv2.FONT_HERSHEY_DUPLEX
 
     while True:
 
         # 内蔵カメラから読み込んだキャプチャデータを取得
         ret, frame = cap.read()
+        height, width, channels = frame.shape
 
-        # print("send frame data to sagemaker endpoint...")
-        ret, fileImg = cv2.imencode('.png', frame)
+        small = cv2.resize(frame, (int(width * scale_factor), int(height * scale_factor)))
+        ret, fileImg = cv2.imencode('.png', small)
 
         endpoint_name = 'DEMO-imageclassification-ep--2018-09-16-07-40-25'
         response = runtime.invoke_endpoint(EndpointName=endpoint_name,
@@ -53,7 +36,8 @@ if __name__ == "__main__":
         result = json.loads(result)
         # the result will output the probabilities for all classes
         # find the class with maximum probability and print the class index
-        index = np.argmax(result)
+        # index = np.argmax(result)
+        indexs = np.argsort(result)[::-1][:5]  # ここを修正
         object_categories = ['ak47', 'american-flag', 'backpack', 'baseball-bat', 'baseball-glove', 'basketball-hoop',
                              'bat', 'bathtub', 'bear', 'beer-mug', 'billiards', 'binoculars', 'birdbath', 'blimp',
                              'bonsai-101', 'boom-box', 'bowling-ball', 'bowling-pin', 'boxing-glove', 'brain-101',
@@ -94,10 +78,13 @@ if __name__ == "__main__":
                              'washing-machine', 'watch-101', 'waterfall', 'watermelon', 'welding-mask', 'wheelbarrow',
                              'windmill', 'wine-bottle', 'xylophone', 'yarmulke', 'yo-yo', 'zebra', 'airplanes-101',
                              'car-side-101', 'faces-easy-101', 'greyhound', 'tennis-shoes', 'toad', 'clutter']
-        probability = result[index] * 100
-        print("Result: label - " + object_categories[index] + ", probability - " + str(probability))
-        cv2.putText(frame, object_categories[index] + ": " + str(probability), (25, 40), fontface, fontscale,
-                    color)
+        i = 0
+        for index in indexs:
+            probability = result[index] * 100
+            print("Result: label - " + object_categories[index] + ", probability - " + str(probability))
+            cv2.putText(frame, object_categories[index] + ": " + str(probability), (25, 40 + (i*25)), fontface, fontscale,
+                        color)
+            i += 1
 
         # 表示
         cv2.imshow("frame", frame)
