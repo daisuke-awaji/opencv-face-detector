@@ -1,5 +1,14 @@
 # OpenCV face detector
 
+- open_cv_detect_faces.py
+  - OpenCVを使用した顔認識
+- detect_faces.py
+  - AmazonRekognition APIを使用した顔認識
+  - 顔の認識に加えて、「笑顔」「感情」などの情報を取得する
+- detact_label.py
+  - AmazonRekognition APIを使用した画像分類
+  - 画像に写っている物体を認識する
+
 OpenCVを使用してMacbookのインカメラを起動し、顔認識を行います。
 認識された顔は白枠で囲われます。
 
@@ -24,7 +33,7 @@ $ . .venv/bin/activate
 
 起動方法は簡単です。
 ```
-$ python capture.py
+$ python open_cv_detect_faces.py
 ...<インカメラ起動>
 ...<終了したいときは`q`を押す>
 ```

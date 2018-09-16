@@ -1,6 +1,10 @@
 # coding: utf-8
+from time import sleep
 
+import boto3
 import cv2
+
+client = boto3.client('rekognition')
 
 if __name__ == "__main__":
 
