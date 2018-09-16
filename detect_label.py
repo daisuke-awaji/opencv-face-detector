@@ -51,7 +51,8 @@ if __name__ == "__main__":
         for label in response['Labels']:
             print(label['Name'] + ' : ' + str(label['Confidence']))
             # cv2.putText(描画先, 描画文字列, 描画座標[左下が基準], フォント, フォントカラー)
-            cv2.putText(frame, label['Name'] + ' : ' + str(label['Confidence']), (25, 40+(i*15)), fontface, fontscale, color)
+            cv2.putText(frame, label['Name'] + ' : ' + str(label['Confidence']), (25, 40 + (i * 15)), fontface,
+                        fontscale, color)
             i += 1
 
         # print(response)
