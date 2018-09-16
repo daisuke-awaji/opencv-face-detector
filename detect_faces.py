@@ -11,7 +11,7 @@ cap = cv2.VideoCapture(0)
 rekognition = boto3.client('rekognition')
 
 # font-size
-fontscale = 0.5
+fontscale = 1.0
 # font-color (B, G, R)
 color = (0, 120, 238)
 # font
@@ -44,7 +44,7 @@ while(True):
         for emothion in emothions:
             cv2.putText(frame,
                         str(emothion['Type']) + ": " + str(emothion['Confidence']),
-                        (25, 40 + (i * 15)),
+                        (25, 40 + (i * 25)),
                         fontface,
                         fontscale,
                         color)

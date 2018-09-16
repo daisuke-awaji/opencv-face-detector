@@ -1,5 +1,11 @@
 # OpenCV face detector
 
+OpenCVを使用してMacbookのインカメラを起動し、顔認識を行います。
+
+![sample](./picture/sample.jpeg)
+
+本プロジェクトでは、以下のソースを用意しています。
+
 - open_cv_detect_faces.py
   - OpenCVを使用した顔認識
 - detect_faces.py
@@ -9,10 +15,8 @@
   - AmazonRekognition APIを使用した画像分類
   - 画像に写っている物体を認識する
 
-OpenCVを使用してMacbookのインカメラを起動し、顔認識を行います。
-認識された顔は白枠で囲われます。
-
-![sample](./picture/sample.jpeg)
+以下のgifはdetect_faces.pyを実行した例です。
+![detectfaces](./picture/detect_faces.gif)
 
 # Setting
 事前にpython3の環境を用意して置きましょう。
@@ -37,4 +41,3 @@ $ python open_cv_detect_faces.py
 ...<インカメラ起動>
 ...<終了したいときは`q`を押す>
 ```
-
