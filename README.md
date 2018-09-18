@@ -11,6 +11,9 @@ FILE | DESCRIPTION
 open_cv_detect_faces.py | OpenCVを使用した顔認識 <br> 顔を認識すると白色の枠で囲む
 detect_faces.py | AmazonRekognition APIを使用した顔認識 <br> 顔の認識に加えて、「笑顔」「感情」などの情報を取得する
 detact_label.py | AmazonRekognition APIを使用した画像分類 <br> 画像に写っている物体を認識する
+sagemaker-image-classification.py | Sagemakerを使用して画像分類の学習モデルを構築、デプロイしたAPIを叩く
+
+
 
 以下のgifはdetect_faces.pyを実行した例です。
 笑顔を検知すると緑色に、それ以外だと赤色の枠が顔を囲います。
