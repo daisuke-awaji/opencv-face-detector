@@ -2,7 +2,7 @@ boto3==1.9.4
 botocore==1.12.4
 docutils==0.14
 jmespath==0.9.3
-numpy==1.15.1
+numpy==1.22.0
 opencv-python==3.4.3.18
 PyAudio==0.2.11
 python-dateutil==2.7.3
